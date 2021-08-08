@@ -4,13 +4,13 @@
         <v-layout>
             <v-flex sm8 mx-auto>
                 <v-card>
-                    <v-card-title class="primary white--text" > Listado de Cementerios</v-card-title>
+                    <v-card-title class="primary white--text"> Listado de Cementerios</v-card-title>
                     <v-card-actions>
                         <v-btn class="ml-3" color="primary" @click="listarCementerios()">Listar<v-icon right>list</v-icon>
                         </v-btn>
                     </v-card-actions>
                     <v-card-text>
-                        <v-data-table :headers="encabezadosCementerio" :items="elementosCementerio" ></v-data-table>
+                        <v-data-table :headers="encabezadosCementerio" :items="elementosCementerio"></v-data-table>
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -27,7 +27,6 @@ export default {
             nombreCementerio: '',
             parroquiaCementerio: '',
             direccionCementerio: '',
-           
 
             encabezadosCementerio: [{
                     text: 'Id',
@@ -53,6 +52,9 @@ export default {
             }]
 
         }
+    },
+    mounted() {
+        this.listarCementerios();
     },
     methods: {
 

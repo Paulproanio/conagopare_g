@@ -83,7 +83,18 @@ const routes = [
     path: '/listarnicho',
     name: 'Listarnicho',
     component: () => import(/* webpackChunkName: "about" */ '../views/Listarnicho.vue')
-  }
+  },
+  {
+    path: '/listarepresentantes',
+    name: 'Listarepresentantes',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Listarepresentantes.vue')
+  },
+  {
+    path: '/listarfallecimientos',
+    name: 'Listarfallecimientos',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Listarfallecimientos.vue')
+  },
+
 ]
 
 const router = new VueRouter({

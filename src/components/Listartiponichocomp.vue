@@ -45,6 +45,9 @@ export default {
             }]
         };
     },
+    mounted(){
+        this.listarTipoNicho();
+    },
     methods: {
         listarTipoNicho() {
             axios.get('http://45.236.105.179:9000/api/conagopare/tipoNicho')

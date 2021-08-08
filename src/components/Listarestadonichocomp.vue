@@ -40,6 +40,9 @@ export default {
             }]
         };
     },
+    mounted() {
+        this.listarEstadoNicho();
+    },
     methods: {
         listarEstadoNicho() {
             axios.get('http://45.236.105.179:9000/api/conagopare/estadoNicho')

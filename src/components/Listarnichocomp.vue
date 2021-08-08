@@ -60,16 +60,19 @@ export default {
 
         };
     },
+    mounted() {
+        this.listarNicho();
+    },
     methods: {
         listarNicho() {
             axios.get('http://45.236.105.179:9000/api/conagopare/nicho')
-            .then(res => {
-               // console.log(res)
-               this.elementosNicho = res.data;
-            })
-            .catch(err => {
-                console.error(err); 
-            })
+                .then(res => {
+                    // console.log(res)
+                    this.elementosNicho = res.data;
+                })
+                .catch(err => {
+                    console.error(err);
+                })
         }
 
     }

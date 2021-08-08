@@ -19,25 +19,32 @@
                     <v-card-text>
                         <v-layout wrap>
                             <v-flex class=" mt-1 sm10">
-                                <v-text-field prepend-icon="pin" label="Cédula representante.." outlined filled v-model="cedulaRepresentanteFallecido">
+                                <v-text-field :disabled="!var_desabilitadora" prepend-icon="pin" label="Cédula representante.." outlined filled v-model="cedulaRepresentanteFallecido">
 
                                 </v-text-field>
 
                             </v-flex>
                             <v-flex class=" mt-1 sm2 mt-3">&nbsp;&nbsp;&nbsp;
-                                <v-btn icon class="error">
-                                    <v-icon color="white">check</v-icon>
+
+                                <v-btn icon class="primary" :disabled="interuptorboton">
+                                    <v-icon :color="botoncolor" @click="revisarRepresentante(cedulaRepresentanteFallecido)">{{a}} </v-icon>
                                 </v-btn>
+
                             </v-flex>
+                            <v-layout wrap>
+                                <v-flex sm12>
+                                    <v-text-field disabled v-model="nombrederepresentante" prepend-icon="assignment_ind" outlined filled></v-text-field>
+                                </v-flex>
+                            </v-layout>
 
                             <v-flex class=" mt-3 sm-12 sm12">
-                                <v-text-field prepend-icon="person" type="text" label="Nombre fallecido.." outlined filled v-model="nombreFallecido"> </v-text-field>
+                                <v-text-field prepend-icon="person" :disabled="var_desabilitadora" type="text" label="Nombre fallecido.." outlined filled v-model="nombreFallecido"> </v-text-field>
                             </v-flex>
 
                             <v-flex class=" mt-3 sm-12 sm6">
                                 <v-dialog ref="dialog" v-model="calendario" :return-value.sync="date" persistent width="290px">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field prepend-icon="event" outlined filled v-model="date" label="Fecha de fallecimiento" readonly v-bind="attrs" v-on="on"></v-text-field>
+                                        <v-text-field :disabled="var_desabilitadora" prepend-icon="event" outlined filled v-model="date" label="Fecha de fallecimiento" readonly v-bind="attrs" v-on="on"></v-text-field>
                                     </template>
                                     <v-date-picker v-model="date" scrollable :first-day-of-week="1" locale="es">
                                         <v-spacer></v-spacer>
@@ -53,14 +60,16 @@
                             </v-flex>
                             <v-flex class=" mt-3 sm-12 sm6">
 
-                                <v-select prepend-icon="mdi-grave-stone" label="Número nicho.." outlined filled v-model="numnicho" item-text="idNicho" item-value="idNicho" :items="elementosNicho"></v-select>
+                                <v-select :disabled="var_desabilitadora" prepend-icon="mdi-grave-stone" label="Número nicho.." outlined filled v-model="numnicho" item-text="idNicho" item-value="idNicho" :items="elementosNicho2"></v-select>
 
                             </v-flex>
                         </v-layout>
 
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn class="ml-3" color="primary" @click="nuevoNichoFallecido">Asignar<v-icon right size="25" color="white">supervisor_account</v-icon>
+                        <v-btn :disabled="var_desabilitadora" class="ml-3" color="primary" @click="nuevoNichoFallecido(nombreFallecido,date,numnicho)">Asignar<v-icon right size="25" color="white">supervisor_account</v-icon>
+                        </v-btn>
+                        <v-btn :disabled="var_desabilitadora" class="ml-3" color="primary" @click="limpiarformulario">Limpiar <v-icon>cleaning_services</v-icon>
                         </v-btn>
                     </v-card-actions>
                 </v-card>
@@ -126,9 +135,9 @@
 import axios from 'axios'
 export default {
     created() {
-        axios.get('http://45.236.105.179:9000/api/conagopare/nicho')
+        axios.get('http://45.236.105.179:9000/api/conagopare/nicho/xidesnicho/2')
             .then(res => {
-                this.elementosNicho = res.data;
+                this.elementosNicho2 = res.data;
             })
             .catch(err => {
                 console.error(err);
@@ -147,8 +156,18 @@ export default {
             telefonoCelRepresentante: '',
             direccionRepresentante: '',
             //////////////////////////
+            botoncolor: 'error',
+            ///////////////////////
+            interuptorboton: false,
+            ///////////////////////
+            a: 'remove_done',
+            ///////////////////////
             cedulaRepresentanteFallecido: '',
             //////////////////////////////
+            nombrederepresentante: '',
+            /////////////////////////////////
+            var_desabilitadora: true,
+            ////////////////////////////////
             date: new Date().toISOString().substr(0, 10),
             calendario: false,
             fecha: '',
@@ -191,7 +210,40 @@ export default {
                     idEstadoNicho: '',
                     descripcionEstadoNicho: ''
                 }
-            }, ]
+            }, ],
+            elementosRepresentante: [{
+                idRepresentante: '',
+                cedulaRepresentante: '',
+                nombreRepresentante: '',
+                telefonoFijoRepresentante: '',
+                telefonoCelRepresentante: '',
+                direccionRepresentante: ''
+            }],
+            ////////////////////
+            elementosNicho2: [{
+                idNicho: '',
+                bloque: {
+                    idBloque: '',
+                    descripcionBloque: ''
+                },
+                tipoNicho: {
+                    idTipoNicho: '',
+                    descripcionTipoNicho: '',
+                    valorTipoNicho: ''
+                },
+                estadoNicho: {
+                    idEstadoNicho: '',
+                    descripcionEstadoNicho: ''
+                }
+            }, ],
+            elementosRepresentante: [{
+                idRepresentante: '',
+                cedulaRepresentante: '',
+                nombreRepresentante: '',
+                telefonoFijoRepresentante: '',
+                telefonoCelRepresentante: '',
+                direccionRepresentante: ''
+            }]
 
         };
     },
@@ -233,6 +285,15 @@ export default {
             }
 
         },
+        limpiarformulario() {
+            this.cedulaRepresentanteFallecido = '';
+            this.nombrederepresentante = '';
+            this.botoncolor = 'error';
+            this.a = 'remove_done';
+            this.nombreFallecido = '';
+            this.var_desabilitadora = true;
+            this.numnicho = 0;
+        },
         cerrar() {
             this.idRepresentante = '';
             this.cedulaRepresentante = '';
@@ -241,46 +302,132 @@ export default {
             this.telefonoCelRepresentante = '';
             this.direccionRepresentante = '';
         },
-        nuevoNichoFallecido() {
+        nuevoNichoFallecido(a, b, c) {
+            if (a == '' || b == '' || c == '') {
+                alert("Los campos no deben quedar vacíos.");
 
-            let json = {
+            } else {
+                let json = {
 
-                idFallecido: '',
-                nombreFallecido: this.nombreFallecido,
-                fechFallecimiento: this.date,
-                representante: {
-                    idRepresentante: 1 ,
-                    cedulaRepresentante: this.cedulaRepresentanteFallecido,
-                    nombreRepresentante: '',
-                    telefonoFijoRepresentante: '',
-                    telefonoCelRepresentante: '',
-                    direccionRepresentante: ''
-                },
-                nicho: {
-                    idNicho: this.numnicho,
-                    bloque: {
-                        idBloque: '',
-                        descripcionBloque: '',
+                    idFallecido: '',
+                    nombreFallecido: this.nombreFallecido,
+                    fechFallecimiento: this.date,
+                    representante: {
+                        idRepresentante: this.idRepresentante,
+                        cedulaRepresentante: this.cedulaRepresentanteFallecido,
+                        nombreRepresentante: '',
+                        telefonoFijoRepresentante: '',
+                        telefonoCelRepresentante: '',
+                        direccionRepresentante: ''
                     },
-                    tipoNicho: {
-                        idTipoNicho: '',
-                        descripcionTipoNicho: '',
-                        valorTipoNicho: '',
-                    },
-                    estadoNicho: {
-                        idEstadoNicho: '',
-                        descripcionEstadoNicho: '',
+                    nicho: {
+                        idNicho: this.numnicho,
+                        bloque: {
+                            idBloque: '',
+                            descripcionBloque: '',
+                        },
+                        tipoNicho: {
+                            idTipoNicho: '',
+                            descripcionTipoNicho: '',
+                            valorTipoNicho: '',
+                        },
+                        estadoNicho: {
+                            idEstadoNicho: '',
+                            descripcionEstadoNicho: '',
+                        }
                     }
                 }
 
+                axios.post('http://45.236.105.179:9000/api/conagopare/fallecido/', json)
+                    .then(res => {
+
+                        this.textoRespuesta = "Registro guardado correctamente."
+                        this.respuesta = true;
+                        this.ocuparnicho(c);
+                        this.limpiarformulario();
+                        this.actualizarnichos();
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
             }
-          axios.post('http://45.236.105.179:9000/api/conagopare/fallecido/',json)
-          .then(res => {
-             
-          })
-          .catch(err => {
-              console.error(err); 
-          })
+        },
+        actualizarnichos() {
+            axios.get('http://45.236.105.179:9000/api/conagopare/nicho/xidesnicho/2')
+                .then(res => {
+                    this.elementosNicho2 = res.data;
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        },
+        ocuparnicho(a) {
+
+            if (a != '') {
+                axios.get('http://45.236.105.179:9000/api/conagopare/nicho/' + a)
+                    .then(res => {
+                        this.elementosNicho = res.data;
+
+                        let json = {
+                            idNicho: this.elementosNicho.idNicho,
+                            bloque: {
+                                idBloque: this.elementosNicho.bloque.idBloque,
+                                descripcionBloque: this.elementosNicho.bloque.descripcionBloque,
+                            },
+                            tipoNicho: {
+                                idTipoNicho: this.elementosNicho.tipoNicho.idTipoNicho,
+                                descripcionTipoNicho: this.elementosNicho.tipoNicho.descripcionTipoNicho,
+                                valorTipoNicho: this.elementosNicho.tipoNicho.valorTipoNicho,
+                            },
+                            estadoNicho: {
+                                idEstadoNicho: 1,
+                            }
+                        }
+                        //  console.log(json);
+                        axios.post('http://45.236.105.179:9000/api/conagopare/nicho/', json)
+                            .then(res => {
+                                // console.log(res)
+                            })
+                            .catch(err => {
+                                console.error(err);
+                            })
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
+            }
+        },
+        revisarRepresentante(a) {
+            if (a == '') {
+                alert("Campo no puede estar vacío.");
+            } else {
+                axios.get('http://45.236.105.179:9000/api/conagopare/representante/findbycedulaRepresentante/' + a)
+                    .then(res => {
+                        //   console.log(res.data.length)
+                        if (res.data.length == 1) {
+                            this.elementosRepresentante = res.data;
+                            // console.log(res.data);
+                            // console.log(res.data[0].cedulaRepresentante);
+                            // console.log(res.data[0].nombreRepresentante);
+                            // console.log(res.data[0].telefonoFijoRepresentante);
+                            // console.log(res.data[0].telefonoCelRepresentante);
+                            // console.log(res.data[0].direccionRepresentante);
+                            this.idRepresentante = res.data[0].idRepresentante;
+                            this.nombrederepresentante = res.data[0].nombreRepresentante;
+                            this.var_desabilitadora = false;
+                            this.botoncolor = 'white';
+                            this.a = 'done_all';
+                            // this.interuptorboton=true;
+                            //  console.log(this.elementosRepresentante[0].cedulaRepresentante);
+
+                        } else {
+                            alert("El representante no existe.");
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
+            }
 
         }
     },

@@ -43,6 +43,9 @@ export default {
 
         }
     },
+    mounted(){
+        this.listarBloques();
+    },
     methods: {
         listarBloques() {
             axios.get('http://45.236.105.179:9000/api/conagopare/bloque')

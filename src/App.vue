@@ -122,6 +122,21 @@
                     <v-list-item-title>{{asignacion.title}} </v-list-item-title>
                 </v-list-item>
             </v-list-group>
+            <v-list-group no-action sub-group>
+                <template v-slot:activator>
+                    <v-list-item-content>
+                        <v-list-item-title>Listar</v-list-item-title>
+                    </v-list-item-content>
+                </template>
+
+                <v-list-item v-for="lista in listas" :key="lista.title" :to="lista.link" link>
+
+                    <v-list-item-icon>
+                        <v-icon v-text="icon">{{lista.icon}} </v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>{{lista.title}} </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
 
         </v-list-group>
         <v-list-group :value="false" prepend-icon="attach_money">
@@ -239,6 +254,19 @@ export default {
                     icon: 'supervisor_account',
                     title: 'Asignar',
                     link: '/asignar'
+                },
+
+            ],
+            //
+            listas: [{
+                    icon: 'list_alt',
+                    title: 'Representantes',
+                    link: '/listarepresentantes'
+                },
+                {
+                    icon: 'view_list',
+                    title: 'Fallecidos',
+                    link: '/listarfallecimientos'
                 },
 
             ],
