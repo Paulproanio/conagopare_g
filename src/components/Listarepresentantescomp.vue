@@ -7,12 +7,15 @@
                     <v-card-title class="primary white--text">Listado de Representantes</v-card-title>
                     <v-card-actions>
                         <v-layout wrap>
-                            <v-flex sm12>
-                                <v-btn class="ml-3" color="primary" @click="listarRepresentantes()">Listar<v-icon right>list_alt</v-icon>
+                            <v-flex sm2>
+
+                            </v-flex>
+                            <v-flex sm4>
+                                <v-btn class="ml-3 mt-5" color="primary" @click="listarRepresentantes()">Listar<v-icon right>list_alt</v-icon>
                                 </v-btn>
                             </v-flex>
-                            <v-flex sm12>
-                                <v-text-field v-model="search" append-icon="mdi-magnify" label="Buscar.."></v-text-field>
+                            <v-flex sm5>
+                                <v-text-field v-model="search" class="mt-5" append-icon="mdi-magnify" label="Buscar.." outlined filled ></v-text-field>
                             </v-flex>
                         </v-layout>
 

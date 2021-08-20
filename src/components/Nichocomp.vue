@@ -12,7 +12,7 @@
                         <v-text-field prepend-icon="mdi-grave-stone" label="Identificador de nicho.." outlined filled v-model="idNicho"></v-text-field>
                         <v-select prepend-icon="grid_view" outlined filled v-model="seleccionbloque" item-text="descripcionBloque" item-value="idBloque" label="Bloque.." :items="elementosBloque"></v-select>
                         <v-select prepend-icon="mdi-state-machine" outlined filled v-model="selecciontiponicho" item-text="descripcionTipoNicho" item-value="idTipoNicho" label="Tipo de nicho.." :items="elementosTipoNicho"></v-select>
-
+                        <v-select prepend-icon="maps_home_work" outlined filled v-model="seleccioncementerio" item-text="nombreCementerio" item-value="idCementerio" label="Cementerio.." :items="elementosCementerio"></v-select>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn class="ml-3" color="primary" @click="nuevoNicho(descripcionBloque)">Guardar<v-icon right>save</v-icon>
@@ -44,21 +44,24 @@
 import axios from 'axios'
 export default {
     created() {
-        let api1, api2, api3;
+        let api1, api2, api3, api4;
 
         api1 = 'http://45.236.105.179:9000/api/conagopare/bloque/';
         api2 = 'http://45.236.105.179:9000/api/conagopare/tipoNicho/';
         api3 = 'http://45.236.105.179:9000/api/conagopare/estadoNicho/';
+        api4 = 'http://45.236.105.179:9000/api/conagopare/cementerio/';
 
         const requestOne = axios.get(api1);
         const requestTwo = axios.get(api2);
         const requestThree = axios.get(api3);
+        const requestFour = axios.get(api4);
 
-        axios.all([requestOne, requestTwo, requestThree])
-            .then(axios.spread((res1, res2, res3) => {
+        axios.all([requestOne, requestTwo, requestThree, requestFour])
+            .then(axios.spread((res1, res2, res3, res4) => {
                 this.elementosBloque = res1.data;
                 this.elementosTipoNicho = res2.data;
                 this.elementosEstadoNicho = res3.data;
+                this.elementosCementerio = res4.data;
 
                 //   console.log(res1);
                 //   console.log(res2);
@@ -76,10 +79,15 @@ export default {
             seleccionbloque: '',
             selecciontiponicho: '',
             seleccionestadonicho: '',
+            seleccioncementerio: '',
             ///////////////////////
             idEstadoNicho: '',
             descripcionEstadoNicho: '',
             descripcionBloque: '',
+            ///////////////////
+            nombreCementerio: '',
+            parroquiaCementerio: '',
+            direccionCementerio: '',
             ///////////////////
 
             elementosBloque: [{
@@ -94,6 +102,12 @@ export default {
             elementosEstadoNicho: [{
                 idEstadoNicho: '',
                 descripcionEstadoNicho: ''
+            }],
+            elementosCementerio: [{
+                idCementerio: '',
+                nombreCementerio: '',
+                parroquiaCementerio: '',
+                direccionCementerio: '',
             }]
 
         }
@@ -113,17 +127,21 @@ export default {
                 estadoNicho: {
                     idEstadoNicho: 2,
 
+                },
+                cementerio: {
+                    idCementerio: this.seleccioncementerio,
                 }
 
             }
+        //    console.log(json);
             axios.post('http://45.236.105.179:9000/api/conagopare/nicho/', json)
                 .then(res => {
                     this.respuesta = true;
-                        this.textoRespuesta = 'Nicho Guardado correctamante';
-                        this.idNicho='';
-                        this.seleccionbloque='';
-                        this.selecciontiponicho='';
-                        this.idEstadoNicho='';
+                    this.textoRespuesta = 'Nicho Guardado correctamante';
+                    this.idNicho = '';
+                    this.seleccionbloque = '';
+                    this.selecciontiponicho = '';
+                    this.idEstadoNicho = '';
 
                 })
                 .catch(err => {

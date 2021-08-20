@@ -94,7 +94,31 @@ const routes = [
     name: 'Listarfallecimientos',
     component: () => import(/* webpackChunkName: "about" */ '../views/Listarfallecimientos.vue')
   },
-
+  {
+    path: '/reportereprefalle',
+    name: 'Reportereprefalle',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Reportereprefalle.vue')
+  },
+  {
+    path: '/pago',
+    name: 'Pago',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Pago.vue')
+  },
+  {
+    path: '/periodopago',
+    name: 'Periodopago',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Periodopago.vue')
+  },
+  {
+    path: '/estadopago',
+    name: 'Estadopago',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Estadopago.vue')
+  },
+  {
+    path: '/reportepagos',
+    name: 'Reportepagos',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Reportepagos.vue')
+  },
 ]
 
 const router = new VueRouter({

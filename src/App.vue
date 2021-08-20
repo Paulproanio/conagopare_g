@@ -158,6 +158,21 @@
                     <v-list-item-title>{{pago.title}} </v-list-item-title>
                 </v-list-item>
             </v-list-group>
+            <v-list-group no-action sub-group>
+                <template v-slot:activator>
+                    <v-list-item-content>
+                        <v-list-item-title>Reportes</v-list-item-title>
+                    </v-list-item-content>
+                </template>
+
+                <v-list-item v-for="reportepago in reportepagos" :key="reportepago.title" :to="reportepago.link" link>
+
+                    <v-list-item-icon>
+                        <v-icon v-text="icon">{{reportepago.icon}} </v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>{{reportepago.title}} </v-list-item-title>
+                </v-list-item>
+            </v-list-group>
 
         </v-list-group>
         <v-list-group :value="false" prepend-icon="settings">
@@ -276,18 +291,41 @@ export default {
                     title: 'Representante',
                     link: '/representante'
                 },
+                {
+                    icon: 'summarize',
+                    title: 'Reporte',
+                    link: '/reportereprefalle'
+                },
 
             ],
             //
             pagos: [{
-                    icon: 'person_add_alt',
-                    title: 'Nuevo',
-                    link: '/registro'
+                    icon: 'payments',
+                    title: 'Pago',
+                    link: '/pago'
                 },
                 {
-                    icon: 'list',
-                    title: 'Listar',
-                    link: '/listarusuarios'
+                    icon: 'price_change',
+                    title: 'Estado',
+                    link: '/estadopago'
+                },
+                 {
+                    icon: 'hourglass_bottom',
+                    title: 'Periodo',
+                    link: '/periodopago'
+                },
+
+            ],
+            // 
+            reportepagos: [{
+                    icon: 'summarize',
+                    title: 'Pagos',
+                    link: '/reportepagos'
+                },
+                {
+                    icon: 'sync',
+                    title: 'Actualizar',
+                    link: '/reporte'
                 },
 
             ],
