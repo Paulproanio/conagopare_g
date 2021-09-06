@@ -77,7 +77,7 @@ export default {
                     idEstadoPago: '',
                     nombreEstadoPago: nombreestado,
                 }
-                axios.post('http://45.236.105.179:9000/api/conagopare/estadoPago/', json)
+                axios.post('http://45.236.105.178:9000/api/conagopare/estadoPago/', json)
                     .then(res => {
 
                         this.listarEstadoPago();
@@ -92,7 +92,7 @@ export default {
 
         },
         listarEstadoPago() {
-            axios.get('http://45.236.105.179:9000/api/conagopare/estadoPago/')
+            axios.get('http://45.236.105.178:9000/api/conagopare/estadoPago/')
                 .then(res => {
                     this.elementosEstadoPago = res.data;
 

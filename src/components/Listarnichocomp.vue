@@ -84,7 +84,7 @@ export default {
     },
     mounted() {
         // this.listarNicho();
-        axios.get('http://45.236.105.179:9000/api/conagopare/cementerio/')
+        axios.get('http://45.236.105.178:9000/api/conagopare/cementerio/')
             .then(res => {
 this.elementosCementerio = res.data;
             })
@@ -95,7 +95,7 @@ this.elementosCementerio = res.data;
     methods: {
         listarNicho(a) {
           //  console.log(a);
-            axios.get('http://45.236.105.179:9000/api/conagopare/nicho/xidcem/'+a)
+            axios.get('http://45.236.105.178:9000/api/conagopare/nicho/xidcem/'+a)
                 .then(res => {
                     // console.log(res)
                     this.elementosNicho = res.data;

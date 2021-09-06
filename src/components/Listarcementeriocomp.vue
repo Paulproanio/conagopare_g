@@ -59,7 +59,7 @@ export default {
     methods: {
 
         listarCementerios() {
-            axios.get('http://45.236.105.179:9000/api/conagopare/cementerio/')
+            axios.get('http://45.236.105.178:9000/api/conagopare/cementerio/')
                 .then(res => {
                     this.elementosCementerio = res.data;
                 })

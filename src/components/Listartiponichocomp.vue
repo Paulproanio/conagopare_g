@@ -50,7 +50,7 @@ export default {
     },
     methods: {
         listarTipoNicho() {
-            axios.get('http://45.236.105.179:9000/api/conagopare/tipoNicho')
+            axios.get('http://45.236.105.178:9000/api/conagopare/tipoNicho')
                 .then(res => {
                     this.elementosTipoNicho = res.data;
                 })

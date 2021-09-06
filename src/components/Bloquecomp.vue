@@ -83,7 +83,7 @@ export default {
 
                 //    console.log(json);
 
-                axios.post('http://45.236.105.179:9000/api/conagopare/bloque/', json)
+                axios.post('http://45.236.105.178:9000/api/conagopare/bloque/', json)
                     .then(res => {
                         //  console.log(res);
                         this.respuesta = true;

@@ -60,7 +60,7 @@ export default {
                 valorTipoNicho: valorTipoNicho
 
             }
-            axios.post('http://45.236.105.179:9000/api/conagopare/tipoNicho/', json)
+            axios.post('http://45.236.105.178:9000/api/conagopare/tipoNicho/', json)
                 .then(res => {
                     //  console.log(res)
                     this.descripcionTipoNicho = '';

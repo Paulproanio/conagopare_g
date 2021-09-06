@@ -75,7 +75,7 @@ export default {
     },
     methods: {
         listaFallecimientos() {
-            axios.get('http://45.236.105.179:9000/api/conagopare/fallecido')
+            axios.get('http://45.236.105.178:9000/api/conagopare/fallecido')
                 .then(res => {
                     this.elementosFallecido = res.data;
                 })

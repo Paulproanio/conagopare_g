@@ -90,7 +90,7 @@ export default {
                     parroquiaCementerio: this.parroquiaCementerio,
                     direccionCementerio: this.direccionCementerio
                 }
-                axios.post('http://45.236.105.179:9000/api/conagopare/cementerio/', json)
+                axios.post('http://45.236.105.178:9000/api/conagopare/cementerio/', json)
                     .then(res => {
                         this.nombreCementerio = '',
                             this.parroquiaCementerio = '',

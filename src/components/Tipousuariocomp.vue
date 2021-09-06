@@ -59,7 +59,7 @@ export default {
                     descripcionTipoUsuario: this.descripcionTipoUsuario
 
                 }
-                axios.post('http://45.236.105.179:9000/api/conagopare/tipoUsuario/', json)
+                axios.post('http://45.236.105.178:9000/api/conagopare/tipoUsuario/', json)
                     .then(res => {
                         this.descripcionTipoUsuario = '',
                             this.respuesta = true,

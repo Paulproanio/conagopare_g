@@ -67,8 +67,8 @@ export default {
 
         let api1,api2;
 
-        api1 = 'http://45.236.105.179:9000/api/conagopare/cementerio/';
-        api2 = 'http://45.236.105.179:9000/api/conagopare/tipoUsuario/';
+        api1 = 'http://45.236.105.178:9000/api/conagopare/cementerio/';
+        api2 = 'http://45.236.105.178:9000/api/conagopare/tipoUsuario/';
 
         const requestOne = axios.get(api1);
         const requestTwo = axios.get(api2);
@@ -137,7 +137,7 @@ export default {
                     },
 
                 }
-                axios.post('http://45.236.105.179:9000/api/conagopare/usuario/', json)
+                axios.post('http://45.236.105.178:9000/api/conagopare/usuario/', json)
                     .then(res => {
                           this.nombreUsuario='',
                      this.correoUsuario='',
@@ -156,7 +156,7 @@ export default {
 
         },
         listarCementerios() {
-            axios.get('http://45.236.105.179:9000/api/conagopare/cementerio')
+            axios.get('http://45.236.105.178:9000/api/conagopare/cementerio')
                 .then(res => {
                     this.elementosCementerio = res.data;
                 })
@@ -165,7 +165,7 @@ export default {
                 })
         },
         listarTipoUsuario() {
-            axios.get('http://45.236.105.179:9000/api/conagopare/tipoUsuario')
+            axios.get('http://45.236.105.178:9000/api/conagopare/tipoUsuario')
                 .then(res => {
                     this.elementosCementerio = res.data;
                 })

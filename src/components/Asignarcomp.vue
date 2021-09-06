@@ -135,7 +135,7 @@
 import axios from 'axios'
 export default {
     created() {
-        axios.get('http://45.236.105.179:9000/api/conagopare/nicho/xidesnicho/2')
+        axios.get('http://45.236.105.178:9000/api/conagopare/nicho/xidesnicho/2')
             .then(res => {
                 this.elementosNicho2 = res.data;
             })
@@ -264,7 +264,7 @@ export default {
                     telefonoCelRepresentante: this.telefonoCelRepresentante,
                     direccionRepresentante: this.direccionRepresentante,
                 }
-                axios.post('http://45.236.105.179:9000/api/conagopare/representante/', json)
+                axios.post('http://45.236.105.178:9000/api/conagopare/representante/', json)
                     .then(res => {
                         this.respuesta = true;
                         this.crearrepresentantedialog = false;
@@ -338,7 +338,7 @@ export default {
                     }
                 }
 
-                axios.post('http://45.236.105.179:9000/api/conagopare/fallecido/', json)
+                axios.post('http://45.236.105.178:9000/api/conagopare/fallecido/', json)
                     .then(res => {
 
                         this.textoRespuesta = "Registro guardado correctamente."
@@ -353,7 +353,7 @@ export default {
             }
         },
         actualizarnichos() {
-            axios.get('http://45.236.105.179:9000/api/conagopare/nicho/xidesnicho/2')
+            axios.get('http://45.236.105.178:9000/api/conagopare/nicho/xidesnicho/2')
                 .then(res => {
                     this.elementosNicho2 = res.data;
                 })
@@ -364,7 +364,7 @@ export default {
         ocuparnicho(a) {
 
             if (a != '') {
-                axios.get('http://45.236.105.179:9000/api/conagopare/nicho/' + a)
+                axios.get('http://45.236.105.178:9000/api/conagopare/nicho/' + a)
                     .then(res => {
                         this.elementosNicho = res.data;
 
@@ -384,7 +384,7 @@ export default {
                             }
                         }
                         //  console.log(json);
-                        axios.post('http://45.236.105.179:9000/api/conagopare/nicho/', json)
+                        axios.post('http://45.236.105.178:9000/api/conagopare/nicho/', json)
                             .then(res => {
                                 // console.log(res)
                             })
@@ -401,7 +401,7 @@ export default {
             if (a == '') {
                 alert("Campo no puede estar vacío.");
             } else {
-                axios.get('http://45.236.105.179:9000/api/conagopare/representante/findbycedulaRepresentante/' + a)
+                axios.get('http://45.236.105.178:9000/api/conagopare/representante/findbycedulaRepresentante/' + a)
                     .then(res => {
                         //   console.log(res.data.length)
                         if (res.data.length == 1) {

@@ -88,7 +88,7 @@ export default {
                     periodoPago: periodo,
                 }
               //  console.log(json);
-                axios.post('http://45.236.105.179:9000/api/conagopare/periodoPago/', json)
+                axios.post('http://45.236.105.178:9000/api/conagopare/periodoPago/', json)
                     .then(res => {
 
                         this.listarPeriodoPago();
@@ -104,7 +104,7 @@ export default {
 
         },
         listarPeriodoPago() {
-            axios.get('http://45.236.105.179:9000/api/conagopare/periodoPago/')
+            axios.get('http://45.236.105.178:9000/api/conagopare/periodoPago/')
                 .then(res => {
                     this.elementosPeriodoPago = res.data;
 

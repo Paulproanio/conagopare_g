@@ -46,10 +46,10 @@ export default {
     created() {
         let api1, api2, api3, api4;
 
-        api1 = 'http://45.236.105.179:9000/api/conagopare/bloque/';
-        api2 = 'http://45.236.105.179:9000/api/conagopare/tipoNicho/';
-        api3 = 'http://45.236.105.179:9000/api/conagopare/estadoNicho/';
-        api4 = 'http://45.236.105.179:9000/api/conagopare/cementerio/';
+        api1 = 'http://45.236.105.178:9000/api/conagopare/bloque/';
+        api2 = 'http://45.236.105.178:9000/api/conagopare/tipoNicho/';
+        api3 = 'http://45.236.105.178:9000/api/conagopare/estadoNicho/';
+        api4 = 'http://45.236.105.178:9000/api/conagopare/cementerio/';
 
         const requestOne = axios.get(api1);
         const requestTwo = axios.get(api2);
@@ -134,7 +134,7 @@ export default {
 
             }
         //    console.log(json);
-            axios.post('http://45.236.105.179:9000/api/conagopare/nicho/', json)
+            axios.post('http://45.236.105.178:9000/api/conagopare/nicho/', json)
                 .then(res => {
                     this.respuesta = true;
                     this.textoRespuesta = 'Nicho Guardado correctamante';

@@ -136,7 +136,7 @@ export default {
             if (a == '') {
                 alert("Campo no puede estar vacío.");
             } else {
-                axios.get('http://45.236.105.179:9000/api/conagopare/representante/findbycedulaRepresentante/' + a)
+                axios.get('http://45.236.105.178:9000/api/conagopare/representante/findbycedulaRepresentante/' + a)
                     .then(res => {
                         //  console.log(res.data)
                         if (res.data.length == 1) {
@@ -166,7 +166,7 @@ export default {
         },
 
         reportegeneral(a) {
-            axios.get('http://45.236.105.179:9000/api/conagopare/pago/rep/' + a)
+            axios.get('http://45.236.105.178:9000/api/conagopare/pago/rep/' + a)
                 .then(res => {
                     //  console.log(res.data)
                     this.elementosPagoFallecidoNicho = res.data;

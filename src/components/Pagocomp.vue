@@ -286,7 +286,7 @@ export default {
             if (a == '') {
                 alert("Campo no puede estar vacío.");
             } else {
-                axios.get('http://45.236.105.179:9000/api/conagopare/representante/findbycedulaRepresentante/' + a)
+                axios.get('http://45.236.105.178:9000/api/conagopare/representante/findbycedulaRepresentante/' + a)
                     .then(res => {
                         // console.log(res.data.length)
                         if (res.data.length == 1) {
@@ -314,7 +314,7 @@ export default {
 
         },
         listaFallecimientos(a) {
-            axios.get('http://45.236.105.179:9000/api/conagopare/fallecido/nicdeunrep/' + a)
+            axios.get('http://45.236.105.178:9000/api/conagopare/fallecido/nicdeunrep/' + a)
                 .then(res => {
                     // console.log(res.data);
                     this.elementosFallecido = res.data;
@@ -341,7 +341,7 @@ export default {
         },
         revisarpago(a) {
             //   console.log(a);
-            axios.get('http://45.236.105.179:9000/api/conagopare/pago/xidnic/' + a)
+            axios.get('http://45.236.105.178:9000/api/conagopare/pago/xidnic/' + a)
                 .then(res => {
                     if (res.data.length == 0) {
                         //  this.obtenernumerodenicho();
@@ -387,7 +387,7 @@ export default {
 
             }
             //  console.log(json);
-            axios.post('http://45.236.105.179:9000/api/conagopare/pago/', json)
+            axios.post('http://45.236.105.178:9000/api/conagopare/pago/', json)
                 .then(res => {
                     //  console.log(res)
                     this.mostrardialogo(2);

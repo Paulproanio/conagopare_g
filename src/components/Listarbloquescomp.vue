@@ -48,7 +48,7 @@ export default {
     },
     methods: {
         listarBloques() {
-            axios.get('http://45.236.105.179:9000/api/conagopare/bloque')
+            axios.get('http://45.236.105.178:9000/api/conagopare/bloque')
             .then(res => {
                 this.elementosBloques= res.data;
                // console.log(res.data);

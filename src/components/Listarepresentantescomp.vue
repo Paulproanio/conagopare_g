@@ -67,7 +67,7 @@ export default {
     },
     methods: {
         listarRepresentantes() {
-            axios.get('http://45.236.105.179:9000/api/conagopare/representante')
+            axios.get('http://45.236.105.178:9000/api/conagopare/representante')
                 .then(res => {
                     this.elementosRepresentantes = res.data;
                 })

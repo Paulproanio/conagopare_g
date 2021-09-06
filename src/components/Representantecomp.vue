@@ -71,7 +71,7 @@ export default {
                 telefonoCelRepresentante: this.telefonoCelRepresentante,
                 direccionRepresentante: this.direccionRepresentante,
             }
-            axios.post('http://45.236.105.179:9000/api/conagopare/representante/', json)
+            axios.post('http://45.236.105.178:9000/api/conagopare/representante/', json)
                 .then(res => {
                     this.respuesta = true;
                     this.textoRespuesta = 'Representante guardado correctamante.';

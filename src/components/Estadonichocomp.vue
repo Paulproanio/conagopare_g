@@ -59,7 +59,7 @@ export default {
                     descripcionEstadoNicho,
 
                 }
-                axios.post('http://45.236.105.179:9000/api/conagopare/estadoNicho/', json)
+                axios.post('http://45.236.105.178:9000/api/conagopare/estadoNicho/', json)
                     .then(res => {
                         // console.log(res)
                         this.respuesta = true;

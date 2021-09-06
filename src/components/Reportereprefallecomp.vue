@@ -143,7 +143,7 @@ export default {
             if (a == '') {
                 alert("El campo no puede quedar vacío.");
             } else {
-                axios.get('http://45.236.105.179:9000/api/conagopare/fallecido/nicdeunrep/' + a)
+                axios.get('http://45.236.105.178:9000/api/conagopare/fallecido/nicdeunrep/' + a)
                     .then(res => {
                         if (res.data.length == 0) {
                             this.valor = '';
