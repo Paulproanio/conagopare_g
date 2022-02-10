@@ -27,7 +27,7 @@
                             <v-flex class=" mt-1 sm2 mt-3">&nbsp;&nbsp;&nbsp;
 
                                 <v-btn icon class="primary" :disabled="interuptorboton">
-                                    <v-icon :color="botoncolor" @click="revisarRepresentante(cedulaRepresentanteFallecido)">{{a}} </v-icon>
+                                    <v-icon :color="botoncolor" @click="revisarRepresentante(cedulaRepresentanteFallecido)">{{a}}</v-icon>
                                 </v-btn>
 
                             </v-flex>
@@ -41,7 +41,7 @@
                                 <v-text-field prepend-icon="person" :disabled="var_desabilitadora" type="text" label="Nombre fallecido.." outlined filled v-model="nombreFallecido"> </v-text-field>
                             </v-flex>
 
-                            <v-flex class=" mt-3 sm-12 sm6">
+                            <v-flex class=" mt-3 sm-12 sm12">
                                 <v-dialog ref="dialog" v-model="calendario" :return-value.sync="date" persistent width="290px">
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-text-field :disabled="var_desabilitadora" prepend-icon="event" outlined filled v-model="date" label="Fecha de fallecimiento" readonly v-bind="attrs" v-on="on"></v-text-field>
@@ -58,16 +58,26 @@
                                 </v-dialog>
 
                             </v-flex>
-                            <v-flex class=" mt-3 sm-12 sm6">
+                            <v-flex class=" mt-3 sm-12 sm9">
 
-                                <v-select :disabled="var_desabilitadora" prepend-icon="mdi-grave-stone" label="Número nicho.." outlined filled v-model="numnicho" item-text="idNicho" item-value="idNicho" :items="elementosNicho2"></v-select>
+                                <v-select :disabled="var_desabilitadora" prepend-icon="mdi-grave-stone" label="Bloque.." outlined filled v-model="numbloque" item-text="descripcionBloque" item-value="idBloque" :items="elementosBloque"></v-select>
+
+                            </v-flex>
+                            <v-flex sm3 mt-2>
+                                <v-btn icon class="primary mt-3 ml-5" @click="mostrarNichosdebloque(numbloque)">
+                                    <v-icon color="white">check</v-icon>
+                                </v-btn>
+                            </v-flex>
+                            <v-flex class=" mt-3 sm-12 sm12">
+
+                                <v-select :disabled="var_desabilitadoraNicho" prepend-icon="mdi-grave-stone" label="Número nicho.." outlined filled v-model="numnicho" item-text="numeroNicho" item-value="numeroNicho" :items="elementosNicho2"></v-select>
 
                             </v-flex>
                         </v-layout>
 
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn :disabled="var_desabilitadora" class="ml-3" color="primary" @click="nuevoNichoFallecido(nombreFallecido,date,numnicho)">Asignar<v-icon right size="25" color="white">supervisor_account</v-icon>
+                        <v-btn :disabled="var_desabilitadora" class="ml-3" color="primary" @click="nuevoNichoFallecido(nombreFallecido,date,numbloque,numnicho)">Asignar<v-icon right size="25" color="white">supervisor_account</v-icon>
                         </v-btn>
                         <v-btn :disabled="var_desabilitadora" class="ml-3" color="primary" @click="limpiarformulario">Limpiar <v-icon>cleaning_services</v-icon>
                         </v-btn>
@@ -80,11 +90,11 @@
 
         <!-- PANTALLAS EMERGENTES DE DIALOGOS Y ENVIOS -->
         <form v-on:submit.prevent="nuevoRepresentante">
-            <v-dialog v-model="crearrepresentantedialog" width="1200">
+            <v-dialog v-model="crearrepresentantedialog" width="800">
 
                 <v-container>
                     <v-layout>
-                        <v-flex sm8 mx-auto>
+                        <v-flex sm10 mx-auto>
                             <v-card>
                                 <v-card-title class="primary white--text">
                                     <v-icon left color="white" large>mdi-account-tie</v-icon>Representante
@@ -133,19 +143,22 @@
 
 <script>
 import axios from 'axios'
+import VueSimpleAlert from "vue-simple-alert";
 export default {
     created() {
-        axios.get('http://45.236.105.178:9000/api/conagopare/nicho/xidesnicho/2')
-            .then(res => {
-                this.elementosNicho2 = res.data;
-            })
-            .catch(err => {
-                console.error(err);
-            })
+        /*  axios.get('http://45.236.105.178:9000/api/conagopare/nicho/xidesnicho/2')
+              .then(res => {
+                  this.elementosNicho2 = res.data;
+              })
+              .catch(err => {
+                  console.error(err);
+              }),*/
+        this.listarBloques();
     },
     data() {
         return {
             numnicho: '',
+            numbloque: '',
             crearrepresentantedialog: false,
             textoRespuesta: '',
             respuesta: false,
@@ -155,6 +168,8 @@ export default {
             telefonoFijoRepresentante: '',
             telefonoCelRepresentante: '',
             direccionRepresentante: '',
+            descBloqAux: '',
+            idBloAux: '',
             //////////////////////////
             botoncolor: 'error',
             ///////////////////////
@@ -167,6 +182,7 @@ export default {
             nombrederepresentante: '',
             /////////////////////////////////
             var_desabilitadora: true,
+            var_desabilitadoraNicho: true,
             ////////////////////////////////
             date: new Date().toISOString().substr(0, 10),
             calendario: false,
@@ -234,7 +250,14 @@ export default {
                 estadoNicho: {
                     idEstadoNicho: '',
                     descripcionEstadoNicho: ''
-                }
+                },
+                cementerio: {
+                    idCementerio: '',
+                    nombreCementerio: '',
+                    parroquiaCementerio: '',
+                    direccionCementerio: ''
+                },
+                numeroNicho: '',
             }, ],
             elementosRepresentante: [{
                 idRepresentante: '',
@@ -243,6 +266,28 @@ export default {
                 telefonoFijoRepresentante: '',
                 telefonoCelRepresentante: '',
                 direccionRepresentante: ''
+            }],
+            elementosBloque: [{
+                idBloque: '',
+                descripcionBloque: ''
+            }],
+            elementosNichoGuardar: [{
+                "idNicho": '',
+                "bloque": {
+                    "idBloque": '',
+                    "descripcionBloque": '',
+                },
+                "tipoNicho": {
+                    "idTipoNicho": '',
+                },
+                "estadoNicho": {
+                    "idEstadoNicho": '',
+
+                },
+                "cementerio": {
+                    "idCementerio": '',
+                },
+                "numeroNicho": '',
             }]
 
         };
@@ -255,32 +300,52 @@ export default {
                 alert("El campo no puede quedar vacío");
             } else {
 
-                let json = {
-
-                    idRepresentante: this.idRepresentante,
-                    cedulaRepresentante: this.cedulaRepresentante,
-                    nombreRepresentante: this.nombreRepresentante,
-                    telefonoFijoRepresentante: this.telefonoFijoRepresentante,
-                    telefonoCelRepresentante: this.telefonoCelRepresentante,
-                    direccionRepresentante: this.direccionRepresentante,
-                }
-                axios.post('http://45.236.105.178:9000/api/conagopare/representante/', json)
+                //    if (a == '') {
+                //      alert("Campo no puede estar vacío.");
+                // } else {
+                axios.get('http://45.236.105.178:9000/api/conagopare/representante/findbycedulaRepresentante/' + this.cedulaRepresentante)
                     .then(res => {
-                        this.respuesta = true;
-                        this.crearrepresentantedialog = false;
-                        this.textoRespuesta = 'Representante guardado correctamante.';
-                        this.cedulaRepresentanteFallecido = this.cedulaRepresentante;
-                        this.idRepresentante = '';
-                        this.cedulaRepresentante = '';
-                        this.nombreRepresentante = '';
-                        this.telefonoFijoRepresentante = '';
-                        this.telefonoCelRepresentante = '';
-                        this.direccionRepresentante = '';
+                        //   console.log(res.data.length)
+                        if (res.data.length > 0) {
+                            this.$alert("Ya existe un representante con cédula " + this.cedulaRepresentante + " .");
 
+                        } else {
+                            let json = {
+
+                                idRepresentante: this.idRepresentante,
+                                cedulaRepresentante: this.cedulaRepresentante,
+                                nombreRepresentante: this.nombreRepresentante,
+                                telefonoFijoRepresentante: this.telefonoFijoRepresentante,
+                                telefonoCelRepresentante: this.telefonoCelRepresentante,
+                                direccionRepresentante: this.direccionRepresentante,
+                            }
+                            axios.post('http://45.236.105.178:9000/api/conagopare/representante/', json)
+                                .then(res => {
+                                    /// this.respuesta = true;
+                                    this.crearrepresentantedialog = false;
+                                    this.$alert('Representante guardado correctamante.');
+                                    //   this.textoRespuesta = 'Representante guardado correctamante.';
+                                    this.cedulaRepresentanteFallecido = this.cedulaRepresentante;
+                                    this.idRepresentante = '';
+                                    this.cedulaRepresentante = '';
+                                    this.nombreRepresentante = '';
+                                    this.telefonoFijoRepresentante = '';
+                                    this.telefonoCelRepresentante = '';
+                                    this.direccionRepresentante = '';
+
+                                })
+                                .catch(err => {
+                                    console.error(err);
+                                })
+                        }
                     })
                     .catch(err => {
                         console.error(err);
                     })
+                //   }
+                /////////////////////////////////////////////////////////////////////////////
+
+                /*  */
 
             }
 
@@ -292,7 +357,8 @@ export default {
             this.a = 'remove_done';
             this.nombreFallecido = '';
             this.var_desabilitadora = true;
-            this.numnicho = 0;
+            this.numbloque = '';
+            this.numnicho = '';
         },
         cerrar() {
             this.idRepresentante = '';
@@ -301,12 +367,72 @@ export default {
             this.telefonoFijoRepresentante = '';
             this.telefonoCelRepresentante = '';
             this.direccionRepresentante = '';
+            this.descBloqAux = '';
+            this.idBloAux = '';
         },
-        nuevoNichoFallecido(a, b, c) {
-            if (a == '' || b == '' || c == '') {
+        async nuevoNichoFallecido(a, b, d, c) {
+            //   console.log(a);
+            //   console.log(b);
+            // console.log(d);
+            // console.log(c);
+            if (a == '' || b == '' || c == '' || d == '') {
                 alert("Los campos no deben quedar vacíos.");
 
             } else {
+
+                /*   let api1, api2;
+                   api1 = 'http://45.236.105.178:9000/api/conagopare/bloque/' + d;
+                   api2 = 'http://45.236.105.178:12590/api/conagopare/nicho/xnn/' + c;
+
+                   const requestOne = await axios.get(api1);
+                   const requestTwo = await axios.get(api2);
+
+                   axios.all([requestOne, requestTwo])
+                       .then(axios.spread((res1, res2) => {
+
+                           this.descBloqAux = res1.data.descripcionBloque;
+                           this.idBloAux = res1.data.idBloque;
+
+                           for (let index = 0; index < res2.data.length; index++) {
+                               if (res2.data[index].bloque.idBloque == this.idBloAux) {
+                                   console.log(res2.data[index].idNicho);
+                                   this.idNichoAux = res2.data[index].idNicho;
+                               }
+
+                           }
+
+                       }))*/
+
+                /////////////////////////////////////////////////////
+
+                await axios.get('http://45.236.105.178:9000/api/conagopare/bloque/' + d)
+                    .then(res => {
+                        this.descBloqAux = res.data.descripcionBloque;
+                        this.idBloAux = res.data.idBloque;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
+
+                await axios.get('http://45.236.105.178:9000/api/conagopare/nicho/xnn/' + c)
+                    .then(res => {
+
+                        //  console.log(res.data);
+                        for (let index = 0; index < res.data.length; index++) {
+
+                            if (res.data[index].bloque.idBloque == this.idBloAux) {
+                                //  console.log(res.data[index].idNicho);
+                                this.idNichoAux = res.data[index].idNicho;
+                            }
+
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
+
+                // console.log(this.idNichoAux);
+
                 let json = {
 
                     idFallecido: '',
@@ -320,37 +446,71 @@ export default {
                         telefonoCelRepresentante: '',
                         direccionRepresentante: ''
                     },
+                    codigoNicho: this.descBloqAux + c,
                     nicho: {
-                        idNicho: this.numnicho,
-                        bloque: {
-                            idBloque: '',
-                            descripcionBloque: '',
-                        },
-                        tipoNicho: {
-                            idTipoNicho: '',
-                            descripcionTipoNicho: '',
-                            valorTipoNicho: '',
-                        },
-                        estadoNicho: {
-                            idEstadoNicho: '',
-                            descripcionEstadoNicho: '',
-                        }
+                        idNicho: this.idNichoAux,
                     }
                 }
-
-                axios.post('http://45.236.105.178:9000/api/conagopare/fallecido/', json)
+                console.log(json);
+                await axios.post('http://45.236.105.178:9000/api/conagopare/fallecido/', json)
                     .then(res => {
 
-                        this.textoRespuesta = "Registro guardado correctamente."
-                        this.respuesta = true;
+                        //this.textoRespuesta = "Registro guardado correctamente."
+                        //this.respuesta = true;
+                        this.$alert('Registro guardado correctamante.');
                         this.ocuparnicho(c);
                         this.limpiarformulario();
                         this.actualizarnichos();
+                        this.var_desabilitadoraNicho = true;
                     })
                     .catch(err => {
                         console.error(err);
                     })
+
+                await axios.get('http://45.236.105.178:9000/api/conagopare/nicho/xnn/' + c)
+                    .then(res => {
+                        // console.log(res)
+                        for (let index = 0; index < res.data.length; index++) {
+                            if (res.data[index].bloque.idBloque == d) {
+                                //  console.log(res.data[index])
+                                //  res.data[index];
+
+                                let json2 = {
+                                    "idNicho": res.data[index].idNicho,
+                                    "bloque": {
+                                        "idBloque": res.data[index].bloque.idBloque,
+                                    },
+                                    "tipoNicho": {
+                                        "idTipoNicho": res.data[index].tipoNicho.idTipoNicho,
+
+                                    },
+                                    "estadoNicho": {
+                                        "idEstadoNicho": 1,
+                                    },
+                                    "cementerio": {
+                                        "idCementerio": res.data[index].cementerio.idCementerio,
+                                    },
+                                    "numeroNicho": res.data[index].numeroNicho
+                                }
+
+                                axios.put('http://45.236.105.178:9000/api/conagopare/nicho/', json2)
+                                    .then(res => {
+                                        //   this.$alert('Ubicacion guardada correctamente.');
+                                    })
+                                    .catch(err => {
+                                        console.error(err);
+                                    })
+
+                            }
+
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    })
+
             }
+
         },
         actualizarnichos() {
             axios.get('http://45.236.105.178:9000/api/conagopare/nicho/xidesnicho/2')
@@ -429,7 +589,34 @@ export default {
                     })
             }
 
+        },
+        listarBloques() {
+            axios.get('http://45.236.105.178:9000/api/conagopare/bloque')
+                .then(res => {
+                    this.elementosBloque = res.data;
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        },
+        mostrarNichosdebloque(numbloque) {
+
+            axios.get('http://45.236.105.178:9000/api/conagopare/nicho/lnxidb/' + numbloque)
+                .then(res => {
+
+                    if (res.data.length > 0) {
+                        this.var_desabilitadoraNicho = false;
+                        this.elementosNicho2 = res.data;
+                    } else {
+                        this.$alert("No existen nichos asociados a este bloque.");
+                        this.var_desabilitadoraNicho = true;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                })
         }
+
     },
     components: {
 

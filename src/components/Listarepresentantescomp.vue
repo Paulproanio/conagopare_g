@@ -53,6 +53,10 @@ export default {
                 {
                     text: 'Teléfono Celular',
                     value: 'telefonoCelRepresentante'
+                },
+                 {
+                    text: 'Dirección',
+                    value: 'direccionRepresentante'
                 }
             ],
             elementosRepresentantes: [{

@@ -40,13 +40,14 @@
                                     <td>
                                         <div v-if="item.idPago!= 0">
                                             <v-chip color="yellow" label="">
-                                                {{item.nicho.idNicho}}
+                                                {{item.nicho.bloque.descripcionBloque}}{{item.nicho.numeroNicho}}
                                             </v-chip>
                                         </div>
 
                                     </td>
                                     <td>{{item.valorPago}}</td>
-                                    <td>
+                                  
+                                  <td>
                                         <div v-if="item.estadoPago.idEstadoPago == 1">
                                             <v-tooltip bottom>
                                                 <template v-slot:activator="{ on, attrs }">
@@ -67,6 +68,9 @@
                                                 <span>Pago Caducado</span>
                                             </v-tooltip>
                                         </div>
+                                    </td>
+                                    <td>
+                                        {{new Date()}}
                                     </td>
 
                                 </tr>
@@ -92,6 +96,7 @@ export default {
             valorPago: '',
             idNicho: '',
             idEstadoPago: '',
+            fechaactual: new Date(),
             ////////////////////////
 
             encabezadosPagoFallecidoNicho: [{
@@ -113,6 +118,10 @@ export default {
                 {
                     text: 'Estado',
                     value: 'estadoPago.idEstadoPago'
+                },
+                 {
+                    text: 'Otro',
+                    value: ''
                 }
             ],
             elementosPagoFallecidoNicho: [{
@@ -132,14 +141,14 @@ export default {
         };
     },
     methods: {
-        revisarRepresentante(a) {
+        async revisarRepresentante(a) {
             if (a == '') {
-                alert("Campo no puede estar vacío.");
+                this.$alert("Campo no puede estar vacío.");
             } else {
-                axios.get('http://45.236.105.178:9000/api/conagopare/representante/findbycedulaRepresentante/' + a)
+                await axios.get('http://45.236.105.178:9000/api/conagopare/representante/findbycedulaRepresentante/' + a)
                     .then(res => {
-                        //  console.log(res.data)
-                        if (res.data.length == 1) {
+                        // console.log(res.data[0].idRepresentante)
+                        if (res.data.length > 0) {
                             //  this.elementosPagoFallecidoNicho = res.data;
                             // console.log(res.data);
                             // console.log(res.data[0].cedulaRepresentante);
@@ -151,10 +160,11 @@ export default {
                             //  this.cedulaRepresentante = res.data[0].cedulaRepresentante;
                             //   this.nombreRepresentante = res.data[0].nombreRepresentante;
                             //  this.telefonoCelRepresentante = res.data[0].telefonoCelRepresentante;
-                            this.reportegeneral(a);
+                            this.reportegeneral(res.data[0].cedulaRepresentante);
+                            // console.log(res.data[0].idRepresentante);
 
                         } else {
-                            alert("El representante no existe.");
+                            this.$alert("El representante no existe.");
                         }
                     })
                     .catch(err => {
@@ -166,6 +176,7 @@ export default {
         },
 
         reportegeneral(a) {
+         //   console.log(a);
             axios.get('http://45.236.105.178:9000/api/conagopare/pago/rep/' + a)
                 .then(res => {
                     //  console.log(res.data)
@@ -176,6 +187,9 @@ export default {
                 })
         }
 
+    },
+    created(){
+  this. fechaactual= new Date();
     }
 }
 </script>

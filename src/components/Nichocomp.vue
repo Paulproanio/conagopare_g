@@ -9,13 +9,13 @@
                     </v-card-title>
                     <v-card-subtitle>Ubicación en la que descansa un fallecido.</v-card-subtitle>
                     <v-card-text>
-                        <v-text-field prepend-icon="mdi-grave-stone" label="Identificador de nicho.." outlined filled v-model="idNicho"></v-text-field>
+                        <v-text-field prepend-icon="mdi-grave-stone" label="Número de nicho.." outlined filled v-model="numeroNicho"></v-text-field>
                         <v-select prepend-icon="grid_view" outlined filled v-model="seleccionbloque" item-text="descripcionBloque" item-value="idBloque" label="Bloque.." :items="elementosBloque"></v-select>
                         <v-select prepend-icon="mdi-state-machine" outlined filled v-model="selecciontiponicho" item-text="descripcionTipoNicho" item-value="idTipoNicho" label="Tipo de nicho.." :items="elementosTipoNicho"></v-select>
                         <v-select prepend-icon="maps_home_work" outlined filled v-model="seleccioncementerio" item-text="nombreCementerio" item-value="idCementerio" label="Cementerio.." :items="elementosCementerio"></v-select>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn class="ml-3" color="primary" @click="nuevoNicho(descripcionBloque)">Guardar<v-icon right>save</v-icon>
+                        <v-btn class="ml-3" color="primary" @click="nuevoNicho(numeroNicho,seleccionbloque,selecciontiponicho,seleccioncementerio,descripcionBloque)">Guardar<v-icon right>save</v-icon>
                         </v-btn>
                     </v-card-actions>
 
@@ -26,7 +26,7 @@
     </v-container>
     <template>
         <div>
-            <v-snackbar v-model="respuesta" color="error">
+            <v-snackbar v-model="respuesta" color="primary">
                 {{ textoRespuesta }}
 
                 <template v-slot:action="{ attrs }">
@@ -42,6 +42,7 @@
 
 <script>
 import axios from 'axios'
+import VueSimpleAlert from "vue-simple-alert";
 export default {
     created() {
         let api1, api2, api3, api4;
@@ -73,6 +74,8 @@ export default {
     data() {
         return {
             idNicho: '',
+            numeroNicho: '',
+            descBloq:'',
             respuesta: false,
             textoRespuesta: '',
             /////////////////////
@@ -89,7 +92,9 @@ export default {
             parroquiaCementerio: '',
             direccionCementerio: '',
             ///////////////////
-
+            bandera1: false,
+            bandera2: false,
+            //////////////////
             elementosBloque: [{
                 idBloque: '',
                 descripcionBloque: ''
@@ -113,40 +118,183 @@ export default {
         }
     },
     methods: {
-        nuevoNicho() {
-            let json = {
-                idNicho: this.idNicho,
-                bloque: {
-                    idBloque: this.seleccionbloque,
 
-                },
-                tipoNicho: {
-                    idTipoNicho: this.selecciontiponicho,
+        limpiarDatos() {
+            this.numeroNicho = '';
+            this.seleccionbloque = '';
+            this.selecciontiponicho = '';
+            this.seleccioncementerio = '';
+            this.bandera1= false;
+        },
 
-                },
-                estadoNicho: {
-                    idEstadoNicho: 2,
+        async nuevoNicho(numeroNicho, seleccionbloque, selecciontiponicho, seleccioncementerio, descripcionBloque) {
 
-                },
-                cementerio: {
-                    idCementerio: this.seleccioncementerio,
-                }
+            //  console.log(numeroNicho);
+            //    console.log(seleccionbloque);
+            //    console.log(selecciontiponicho);
+             //   console.log(seleccioncementerio);
+            //   console.log(descripcionBloque);
 
+            if (numeroNicho =='' && seleccionbloque=='' && selecciontiponicho=='' && seleccioncementerio=='' && descripcionBloque =='') {
+
+                this.$alert("Los datos no pueden quedar vacíos!");
+                
+            }else{
+
+            let api1, api2, api3;
+            api1 = 'http://45.236.105.178:9000/api/conagopare/nicho/xnn/' + numeroNicho;
+            api2 = 'http://45.236.105.178:9000/api/conagopare/nicho/xidb/' + seleccionbloque;
+            api3 = 'http://45.236.105.178:9000/api/conagopare/bloque/' + seleccionbloque;
+
+            const requestOne = await axios.get(api1);
+            const requestTwo = await axios.get(api2);
+            const requestThree = await axios.get(api3);
+
+            axios.all([requestOne, requestTwo, requestThree])
+                .then(axios.spread((res1, res2, res3) => {
+
+                    //   let rev = res1.data[0].numeroNicho + res1.data[0].bloque.descripcionBloque;
+                    //  let rev2 = numeroNicho + res3.data.descripcionBloque;
+
+                    //     console.log(rev);
+                   // console.log(res2.data.length);
+               //    console.log(res3.data.descripcionBloque);
+                   this.descBloq =res3.data.descripcionBloque;
+                    if (res2.data.length == 0) {
+
+                        let json = {
+                            idNicho: '',
+                            numeroNicho: this.numeroNicho,
+                            bloque: {
+                                idBloque: this.seleccionbloque,
+
+                            },
+                            tipoNicho: {
+                                idTipoNicho: this.selecciontiponicho,
+
+                            },
+                            estadoNicho: {
+                                idEstadoNicho: 2,
+
+                            },
+                            cementerio: {
+                                idCementerio: this.seleccioncementerio,
+                            }
+
+                        }
+                        //console.log(json); 
+                        axios.post('http://45.236.105.178:9000/api/conagopare/nicho/', json)
+                            .then(res => {
+                              //  this.respuesta = true;
+                              //  this.textoRespuesta = 'Nicho Guardado correctamante';
+                                this.$alert('Nicho Guardado correctamante');
+                                this.idNicho = '';
+                                this.seleccionbloque = '';
+                                this.selecciontiponicho = '';
+                                this.idEstadoNicho = '';
+                                 this.limpiarDatos();
+
+                            })
+                            .catch(err => {
+                                console.error(err);
+                            })
+
+                    } else {
+
+                        for (let index = 0; index < res2.data.length; index++) {
+
+                           // console.log(res2.data[index].numeroNicho);
+                          //  console.log(numeroNicho);
+
+                            if (res2.data[index].numeroNicho == numeroNicho) {
+                                this.bandera1 = true;
+
+                            }
+
+                        }
+
+                        if (!this.bandera1) {
+                            let json = {
+                                idNicho: '',
+                                numeroNicho: this.numeroNicho,
+                                bloque: {
+                                    idBloque: this.seleccionbloque,
+
+                                },
+                                tipoNicho: {
+                                    idTipoNicho: this.selecciontiponicho,
+
+                                },
+                                estadoNicho: {
+                                    idEstadoNicho: 2,
+
+                                },
+                                cementerio: {
+                                    idCementerio: this.seleccioncementerio,
+                                }
+
+                            }
+                            //console.log(json);
+                            axios.post('http://45.236.105.178:9000/api/conagopare/nicho/', json)
+                                .then(res => {
+                                   // this.respuesta = true;
+                                  //  this.textoRespuesta = 'Nicho Guardado correctamante';
+                                  this.$alert('Nicho Guardado correctamante');
+                                    this.idNicho = '';
+                                    this.seleccionbloque = '';
+                                    this.selecciontiponicho = '';
+                                    this.idEstadoNicho = '';
+                                    this.limpiarDatos();
+
+                                })
+                                .catch(err => {
+                                    console.error(err);
+                                })
+                        } else {
+                           // alert("ya existe");
+                            this.$alert("El registro \" "+  this.descBloq+numeroNicho+" \" ya existe.");
+                             this.limpiarDatos();
+                        }
+                    }
+
+                }))
             }
-        //    console.log(json);
-            axios.post('http://45.236.105.178:9000/api/conagopare/nicho/', json)
-                .then(res => {
-                    this.respuesta = true;
-                    this.textoRespuesta = 'Nicho Guardado correctamante';
-                    this.idNicho = '';
-                    this.seleccionbloque = '';
-                    this.selecciontiponicho = '';
-                    this.idEstadoNicho = '';
 
-                })
-                .catch(err => {
-                    console.error(err);
-                })
+
+            /* let json = {
+                 idNicho:'',
+                 numeroNicho: this.numeroNicho,
+                 bloque: {
+                     idBloque: this.seleccionbloque,
+
+                 },
+                 tipoNicho: {
+                     idTipoNicho: this.selecciontiponicho,
+
+                 },
+                 estadoNicho: {
+                     idEstadoNicho: 2,
+
+                 },
+                 cementerio: {
+                     idCementerio: this.seleccioncementerio,
+                 }
+
+             }
+             //console.log(json);
+             axios.post('http://45.236.105.178:9000/api/conagopare/nicho/', json)
+                 .then(res => {
+                     this.respuesta = true;
+                     this.textoRespuesta = 'Nicho Guardado correctamante';
+                     this.idNicho = '';
+                     this.seleccionbloque = '';
+                     this.selecciontiponicho = '';
+                     this.idEstadoNicho = '';
+
+                 })
+                 .catch(err => {
+                     console.error(err);
+                 })*/
 
         }
 

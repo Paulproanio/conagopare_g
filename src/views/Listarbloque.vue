@@ -3,7 +3,7 @@
     <v-container>
         <v-layout wrap>
             <v-flex sm8 mx-auto>
-                <Listarbloquescomp></Listarbloquescomp>
+                <Listarbloque></Listarbloque>
             </v-flex>
         </v-layout>
     </v-container>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Listarbloquescomp from '@/components/Listarbloquescomp.vue'
+import Listarbloque from '@/components/Listarbloque.vue'
 export default {
     data() {
         return {
@@ -21,7 +21,7 @@ export default {
     },
     components: {
 
-        Listarbloquescomp
+        Listarbloque
     },
     methods: {
 

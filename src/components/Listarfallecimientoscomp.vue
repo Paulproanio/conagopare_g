@@ -36,18 +36,21 @@ export default {
     data() {
         return {
             search: '',
-            encabezadosFallecido: [{
-                    text: 'Id Fallecido',
-                    value: 'idFallecido'
-                }, {
+            encabezadosFallecido: [
+                /*{
+                                    text: 'Id Fallecido',
+                                    value: 'idFallecido'
+                                },*/
+                {
+                    text: 'Nombre Fallecido',
+                    value: 'nombreFallecido'
+                },
+                {
                     text: 'Representante',
                     value: 'representante.nombreRepresentante'
                 }, {
-                    text: 'Nombre',
-                    value: 'nombreFallecido'
-                }, {
                     text: 'Nicho',
-                    value: 'nicho.idNicho'
+                    value: 'codigoNicho'
                 },
                 {
                     text: 'Fecha Fallecimiento',
@@ -66,9 +69,7 @@ export default {
                     telefonoCelRepresentante: '',
                     direccionRepresentante: '',
                 },
-                nicho: {
-                    idNicho: '',
-                }
+                codigoNicho: '',
             }]
 
         };

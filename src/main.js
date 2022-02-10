@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueSimpleAlert from "vue-simple-alert";  
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -7,6 +8,8 @@ import '@babel/polyfill'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 
+
+Vue.use(VueSimpleAlert);
 Vue.config.productionTip = false
 
 new Vue({

@@ -17,8 +17,8 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-btn class="ml-3" color="primary" @click="nuevoRepresentante()">Guardar<v-icon right>save</v-icon>
-                        
-                        </v-btn >
+
+                        </v-btn>
                     </v-card-actions>
                 </v-card>
 
@@ -44,6 +44,7 @@
 
 <script>
 import axios from 'axios'
+import VueSimpleAlert from "vue-simple-alert";
 export default {
     data() {
         return {
@@ -56,36 +57,51 @@ export default {
             telefonoCelRepresentante: '',
             direccionRepresentante: '',
 
-
-
         };
     },
     methods: {
         nuevoRepresentante() {
-            let json = {
 
-                idRepresentante: this.idRepresentante,
-                cedulaRepresentante: this.cedulaRepresentante,
-                nombreRepresentante: this.nombreRepresentante,
-                telefonoFijoRepresentante: this.telefonoFijoRepresentante,
-                telefonoCelRepresentante: this.telefonoCelRepresentante,
-                direccionRepresentante: this.direccionRepresentante,
-            }
-            axios.post('http://45.236.105.178:9000/api/conagopare/representante/', json)
+            axios.get('http://45.236.105.178:9000/api/conagopare/representante/findbycedulaRepresentante/' + this.cedulaRepresentante)
                 .then(res => {
-                    this.respuesta = true;
-                    this.textoRespuesta = 'Representante guardado correctamante.';
-                    this.idRepresentante = '';
-                    this.cedulaRepresentante = '';
-                    this.nombreRepresentante = '';
-                    this.telefonoFijoRepresentante = '';
-                    this.telefonoCelRepresentante = '';
-                    this.direccionRepresentante = '';
+                    //   console.log(res.data.length)
+                    if (res.data.length > 0) {
+                        this.$alert("Ya existe un representante con cédula " + this.cedulaRepresentante + " .");
 
+                    } else {
+                        let json = {
+
+                            idRepresentante: this.idRepresentante,
+                            cedulaRepresentante: this.cedulaRepresentante,
+                            nombreRepresentante: this.nombreRepresentante,
+                            telefonoFijoRepresentante: this.telefonoFijoRepresentante,
+                            telefonoCelRepresentante: this.telefonoCelRepresentante,
+                            direccionRepresentante: this.direccionRepresentante,
+                        }
+                        axios.post('http://45.236.105.178:9000/api/conagopare/representante/', json)
+                            .then(res => {
+                                //  this.respuesta = true;
+                                //  this.textoRespuesta = 'Representante guardado correctamante.';
+                                this.$alert('Representante guardado correctamante.');
+                                this.idRepresentante = '';
+                                this.cedulaRepresentante = '';
+                                this.nombreRepresentante = '';
+                                this.telefonoFijoRepresentante = '';
+                                this.telefonoCelRepresentante = '';
+                                this.direccionRepresentante = '';
+
+                            })
+                            .catch(err => {
+                                console.error(err);
+                            })
+
+                    }
                 })
                 .catch(err => {
                     console.error(err);
                 })
+
+            /*   */
         }
 
     }
