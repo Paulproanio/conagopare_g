@@ -46,8 +46,7 @@
 
                                     </td>
                                     <td>{{item.valorPago}}</td>
-                                  
-                                  <td>
+                                    <td>
                                         <div v-if="item.estadoPago.idEstadoPago == 1">
                                             <v-tooltip bottom>
                                                 <template v-slot:activator="{ on, attrs }">
@@ -68,9 +67,30 @@
                                                 <span>Pago Caducado</span>
                                             </v-tooltip>
                                         </div>
+                                         <div v-if="item.estadoPago.idEstadoPago == 3">
+                                            <v-tooltip bottom>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <v-chip label color="warning">
+                                                        <v-icon v-bind="attrs" v-on="on" size="25">error_outline</v-icon>
+                                                    </v-chip>
+                                                </template>
+                                                <span>Pago Caducado</span>
+                                            </v-tooltip>
+                                        </div>
                                     </td>
+
+
+
                                     <td>
-                                        {{new Date()}}
+                                        <div v-if="item.estadoPago.idEstadoPago == 1">
+                                            <v-btn icon @click="archivarpago(item.idPago)">
+
+                                                <v-icon color="primary">
+                                                    upgrade
+                                                </v-icon>
+
+                                            </v-btn>
+                                        </div>
                                     </td>
 
                                 </tr>
@@ -120,9 +140,10 @@ export default {
                     value: 'estadoPago.idEstadoPago'
                 },
                  {
-                    text: 'Otro',
+                    text: 'Acciones',
                     value: ''
-                }
+                },
+
             ],
             elementosPagoFallecidoNicho: [{
                 idPago: '',
@@ -176,7 +197,7 @@ export default {
         },
 
         reportegeneral(a) {
-         //   console.log(a);
+            //   console.log(a);
             axios.get('http://45.236.105.178:9000/api/conagopare/pago/rep/' + a)
                 .then(res => {
                     //  console.log(res.data)
@@ -185,11 +206,45 @@ export default {
                 .catch(err => {
                     console.error(err);
                 })
+        },
+        archivarpago(idPago) {
+            console.log(idPago);
+            axios.get('http://45.236.105.178:9000/api/conagopare/pago/' + idPago)
+                .then(res => {
+
+                    let json = {
+                        "idPago": res.data.idPago,
+                        "valorPago": res.data.valorPago,
+                        "fechaPago": res.data.fechaPago,
+                        "fechaValidez": res.data.fechaValidez,
+                        "nicho": {
+                            "idNicho": res.data.nicho.idNicho,
+                        },
+                        "estadoPago": {
+                            "idEstadoPago": 3,
+                        },
+                        "idTipoRegistroPago": res.data.idTipoRegistroPago
+
+                    }
+                    axios.put('http://45.236.105.178:9000/api/conagopare/pago/', json)
+                        .then(res => {
+                            this.  reportegeneral(this.cedula);
+                            this.$alert("Se ha cambiado de estado el pago!");
+                        })
+                        .catch(err => {
+                            console.error(err);
+                        })
+
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+
         }
 
     },
-    created(){
-  this. fechaactual= new Date();
+    created() {
+        this.fechaactual = new Date();
     }
 }
 </script>
